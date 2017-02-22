@@ -7,6 +7,7 @@
 //
 
 #import "ImageCell.h"
+#import "UIImageView+WebCache.h"
 
 @interface ImageCell ()
 {
@@ -32,10 +33,15 @@
     [self.contentView addSubview:_imageView];
 }
 
--(void)setImage:(UIImage *)image
+-(void)setImageUrl:(NSString *)imageUrl
 {
-    _image = image;
-    _imageView.image = _image;
+    _imageUrl = imageUrl;
+    [_imageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"PlaceHolder"] options:SDWebImageRefreshCached progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        
+    } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        
+    }];
+    
 }
 
 @end

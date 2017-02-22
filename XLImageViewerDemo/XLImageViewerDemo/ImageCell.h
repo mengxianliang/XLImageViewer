@@ -10,6 +10,6 @@
 
 @interface ImageCell : UICollectionViewCell
 
-@property (nonatomic,strong) UIImage *image;
+@property (nonatomic,copy) NSString *imageUrl;
 
 @end

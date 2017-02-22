@@ -7,6 +7,7 @@
 //
 
 #import "XLImageContainer.h"
+#import "UIImageView+WebCache.h"
 
 static CGFloat maxZoomScale = 2.5f;
 static CGFloat minZoomScale = 1.0f;
@@ -96,8 +97,10 @@ static CGFloat minZoomScale = 1.0f;
     [super setFrame:frame];
     //设置ScrollView的frame
     _scrollView.frame = self.bounds;
-    
-    _imageView.image = [UIImage imageNamed:_imageUrl];
+}
+
+-(void)setImageViewFrame
+{
     //这只imageview的图片和范围
     _imageView.frame = CGRectMake(0, 0, _scrollView.bounds.size.width, [self imageViewHeight]);
     //如果图片过长则以图片的高度为高度
@@ -106,6 +109,16 @@ static CGFloat minZoomScale = 1.0f;
     }
     //设置ScrollView的滚动范围
     _scrollView.contentSize = CGSizeMake(_imageView.bounds.size.width, [self imageViewHeight]);
+}
+
+-(void)setImageUrl:(NSString *)imageUrl
+{
+    _imageUrl = imageUrl;
+    [_imageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        
+    } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        [self setImageViewFrame];
+    }];
 }
 
 

@@ -14,7 +14,7 @@
 {
     UICollectionView *_collectionView;
     
-    NSArray *_images;
+    NSArray *_imageUrls;
 }
 @end
 
@@ -31,11 +31,24 @@
 
 -(void)buildData
 {
-    _images = @[@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"11",@"12"];
+    _imageUrls = @[@"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/1.png",
+                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/2.png",
+                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/3.png",
+                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/4.png",
+                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/5.png",
+                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/6.png",
+                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/7.png",
+                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/8.png",
+                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/9.png",
+                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/10.png",
+                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/11.png",
+                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/12.png"];
 }
 
 -(void)buildUI
 {
+    self.view.backgroundColor = [UIColor whiteColor];
+    self.title = @"XLImageViewer";
     
     NSInteger ColumnNumber = 3;
     CGFloat imageMargin = 10.0f;
@@ -58,7 +71,7 @@
 #pragma mark CollectionViewDelegate&DataSource
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return _images.count;
+    return _imageUrls.count;
 }
 
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -71,15 +84,14 @@
     static NSString* cellId = @"ImageCell";
     ImageCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellId forIndexPath:indexPath];
     cell.layer.borderWidth = 1.0f;
-    cell.image = [UIImage imageNamed:_images[indexPath.row]];
+    cell.imageUrl = _imageUrls[indexPath.row];
     return  cell;
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    [[XLImageViewer shareInstanse] showImages:_images index:indexPath.row from:[collectionView cellForItemAtIndexPath:indexPath]];
+    [[XLImageViewer shareInstanse] showImages:_imageUrls index:indexPath.row from:[collectionView cellForItemAtIndexPath:indexPath]];
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
