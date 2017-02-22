@@ -37,6 +37,7 @@
 		188B4F941E5D295100DF4D93 /* UIView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 188B4F7F1E5D295100DF4D93 /* UIView+WebCache.m */; };
 		188B4F951E5D295100DF4D93 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 188B4F811E5D295100DF4D93 /* UIView+WebCacheOperation.m */; };
 		188B4F971E5D2CF200DF4D93 /* PlaceHolder.png in Resources */ = {isa = PBXBuildFile; fileRef = 188B4F961E5D2CF200DF4D93 /* PlaceHolder.png */; };
+		188B4F9B1E5D61E000DF4D93 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 188B4F9A1E5D61E000DF4D93 /* MBProgressHUD.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -98,6 +99,8 @@
 		188B4F801E5D295100DF4D93 /* UIView+WebCacheOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WebCacheOperation.h"; sourceTree = "<group>"; };
 		188B4F811E5D295100DF4D93 /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
 		188B4F961E5D2CF200DF4D93 /* PlaceHolder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PlaceHolder.png; sourceTree = "<group>"; };
+		188B4F991E5D61E000DF4D93 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		188B4F9A1E5D61E000DF4D93 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +181,7 @@
 		188B4F561E5D294400DF4D93 /* Tool */ = {
 			isa = PBXGroup;
 			children = (
+				188B4F981E5D61E000DF4D93 /* MBProgressHUD */,
 				188B4F571E5D295100DF4D93 /* SDWebImage */,
 			);
 			path = Tool;
@@ -237,6 +241,15 @@
 				188B4F5A1E5D295100DF4D93 /* FLAnimatedImageView+WebCache.m */,
 			);
 			path = FLAnimatedImage;
+			sourceTree = "<group>";
+		};
+		188B4F981E5D61E000DF4D93 /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				188B4F991E5D61E000DF4D93 /* MBProgressHUD.h */,
+				188B4F9A1E5D61E000DF4D93 /* MBProgressHUD.m */,
+			);
+			path = MBProgressHUD;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -325,6 +338,7 @@
 				188B4F881E5D295100DF4D93 /* SDWebImageCompat.m in Sources */,
 				188B4F941E5D295100DF4D93 /* UIView+WebCache.m in Sources */,
 				188B4F8D1E5D295100DF4D93 /* SDWebImagePrefetcher.m in Sources */,
+				188B4F9B1E5D61E000DF4D93 /* MBProgressHUD.m in Sources */,
 				188B4F901E5D295100DF4D93 /* UIImage+MultiFormat.m in Sources */,
 				188B4F951E5D295100DF4D93 /* UIView+WebCacheOperation.m in Sources */,
 				188B4F851E5D295100DF4D93 /* NSImage+WebCache.m in Sources */,

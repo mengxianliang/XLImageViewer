@@ -8,6 +8,7 @@
 
 #import "XLImageContainer.h"
 #import "UIImageView+WebCache.h"
+#import "MBProgressHUD.h"
 
 static CGFloat maxZoomScale = 2.5f;
 static CGFloat minZoomScale = 1.0f;
@@ -19,6 +20,8 @@ static CGFloat minZoomScale = 1.0f;
     UIImageView *_imageView;
     
     VoidBlock _tapBlock;
+    
+    MBProgressHUD *_hud;
 }
 @end
 
@@ -32,17 +35,10 @@ static CGFloat minZoomScale = 1.0f;
     return self;
 }
 
--(instancetype)init
-{
-    if (self = [super init]) {
-        [self buildUI];
-    }
-    return self;
-}
-
 -(void)buildUI
 {
     _scrollView = [[UIScrollView alloc] init];
+    _scrollView.frame = self.bounds;
     _scrollView.delegate = self;
     _scrollView.maximumZoomScale = maxZoomScale;
     _scrollView.minimumZoomScale = minZoomScale;
@@ -63,6 +59,12 @@ static CGFloat minZoomScale = 1.0f;
     
     //单击双击共存
     [singleTap requireGestureRecognizerToFail:doubleTap];
+    
+    _hud = [MBProgressHUD showHUDAddedTo:self animated:YES];
+    _hud.mode = MBProgressHUDModeAnnularDeterminate;
+    _hud.bezelView.color = [UIColor clearColor];
+    _hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
+    _hud.contentColor = [UIColor whiteColor];
 }
 
 -(void)layoutSubviews
@@ -92,15 +94,9 @@ static CGFloat minZoomScale = 1.0f;
     }
 }
 
--(void)setFrame:(CGRect)frame
-{
-    [super setFrame:frame];
-    //设置ScrollView的frame
-    _scrollView.frame = self.bounds;
-}
-
 -(void)setImageViewFrame
 {
+    if (!_imageView.image) {return;}
     //这只imageview的图片和范围
     _imageView.frame = CGRectMake(0, 0, _scrollView.bounds.size.width, [self imageViewHeight]);
     //如果图片过长则以图片的高度为高度
@@ -115,9 +111,12 @@ static CGFloat minZoomScale = 1.0f;
 {
     _imageUrl = imageUrl;
     [_imageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _hud.progress = (CGFloat)receivedSize/(CGFloat)expectedSize;
+        });
     } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         [self setImageViewFrame];
+        [_hud hideAnimated:true];
     }];
 }
 
@@ -146,6 +145,8 @@ static CGFloat minZoomScale = 1.0f;
 #pragma mark 显示/隐藏动画
 -(void)showLoadAnimateFromRect:(CGRect)rect
 {
+    //如果还没加载完成网络图片则不显示动画
+    if (!_imageView.image) {return;}
     _imageView.frame = rect;
     CGRect targetFrame = CGRectMake(0, 0, _scrollView.bounds.size.width, [self imageViewHeight]);
     //如果图片过长则以图片的高度为高度
@@ -160,6 +161,7 @@ static CGFloat minZoomScale = 1.0f;
 
 -(void)showHideAnimateToRect:(CGRect)rect
 {
+    if (!_imageView.image) {return;}
     CGRect startRect = CGRectMake(-_scrollView.contentOffset.x + _imageView.frame.origin.x, -_scrollView.contentOffset.y + _imageView.frame.origin.y, _imageView.frame.size.width, _imageView.frame.size.height);
     _imageView.frame = startRect;
     [self addSubview:_imageView];

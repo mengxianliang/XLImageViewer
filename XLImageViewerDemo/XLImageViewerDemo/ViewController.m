@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "XLImageViewer.h"
 #import "ImageCell.h"
+#import "SDImageCache.h"
 
 @interface ViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 {
@@ -31,7 +32,8 @@
 
 -(void)buildData
 {
-    _imageUrls = @[@"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/1.png",
+    _imageUrls = @[
+                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/1.png",
                 @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/2.png",
                 @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/3.png",
                 @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/4.png",
@@ -49,6 +51,8 @@
 {
     self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"XLImageViewer";
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(clearImageCache)];
     
     NSInteger ColumnNumber = 3;
     CGFloat imageMargin = 10.0f;
@@ -91,6 +95,15 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     [[XLImageViewer shareInstanse] showImages:_imageUrls index:indexPath.row from:[collectionView cellForItemAtIndexPath:indexPath]];
+}
+
+-(void)clearImageCache
+{
+    [[SDImageCache sharedImageCache] clearMemory];
+    [[SDImageCache sharedImageCache] clearDiskOnCompletion:^{
+        NSLog(@"清理完成");
+        [_collectionView reloadData];
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

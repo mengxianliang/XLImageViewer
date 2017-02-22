@@ -113,9 +113,8 @@ static CGFloat ImageContainMargin = 10.0f;
     }
     
     for (NSInteger i = 0; i<imageUrls.count ; i++) {
-        XLImageContainer *container = [[XLImageContainer alloc] init];
+        XLImageContainer *container = [[XLImageContainer alloc] initWithFrame:CGRectMake(i * _scrollView.bounds.size.width, 0, self.bounds.size.width, self.bounds.size.height)];
         container.imageUrl = imageUrls[i];
-        container.frame = CGRectMake(i * _scrollView.bounds.size.width, 0, self.bounds.size.width, self.bounds.size.height);
         container.imageContentMode = [self getContentViewOf:imageView];
         [container addTapBlock:^{
             [self backMethod];
