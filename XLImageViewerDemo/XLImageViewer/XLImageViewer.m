@@ -40,8 +40,8 @@ static CGFloat ImageContainMargin = 10.0f;
 
 @implementation XLImageViewer
 
-+(XLImageViewer*)shareInstanse
-{
++(XLImageViewer*)shareInstanse{
+    
     static XLImageViewer *_viewer = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -50,16 +50,15 @@ static CGFloat ImageContainMargin = 10.0f;
     return _viewer;
 }
 
--(instancetype)init
-{
+-(instancetype)init{
+    
     if (self = [super init]) {
         [self buildUI];
     }
     return self;
 }
 
--(void)buildUI
-{
+-(void)buildUI{
     self.frame = [UIScreen mainScreen].bounds;
     CGRect frame = self.bounds;
     frame.size.width += ImageContainMargin;
@@ -92,6 +91,7 @@ static CGFloat ImageContainMargin = 10.0f;
     _saveButton.layer.masksToBounds = true;
     _saveButton.titleLabel.font = [UIFont systemFontOfSize:16];
     [_saveButton setTitle:@"保存" forState:UIControlStateNormal];
+    [_saveButton addTarget:self action:@selector(saveImageMethod) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_saveButton];
     
     _containers = [[NSMutableArray alloc] init];
@@ -99,18 +99,15 @@ static CGFloat ImageContainMargin = 10.0f;
     _currentIndex = 0;
 }
 
--(void)showImages:(NSArray <NSString *>*)imageUrls index:(NSInteger)index from:(UIView*)imageView
-{
+-(void)showImages:(NSArray <NSString *>*)imageUrls index:(NSInteger)index from:(UIView*)imageView{
+    
     _startIndex = index;
     _currentIndex = index;
     _imageUrls = imageUrls;
     _startImageView = imageView;
     
-    [_containers removeAllObjects];
-    
-    for (UIView *subView in _scrollView.subviews) {
-        [subView removeFromSuperview];
-    }
+    //清除上一次的图片容器
+    [self destroyContainers];
     
     for (NSInteger i = 0; i<imageUrls.count ; i++) {
         XLImageContainer *container = [[XLImageContainer alloc] initWithFrame:CGRectMake(i * _scrollView.bounds.size.width, 0, self.bounds.size.width, self.bounds.size.height)];
@@ -142,8 +139,8 @@ static CGFloat ImageContainMargin = 10.0f;
     [container showLoadAnimateFromRect:[imageView convertRect:imageView.bounds toView:self]];
 }
 
--(void)backMethod
-{
+-(void)backMethod{
+    
     _pageLabel.hidden = true;
     _saveButton.hidden = true;
     [UIView animateWithDuration:0.35 animations:^{
@@ -159,8 +156,8 @@ static CGFloat ImageContainMargin = 10.0f;
     }
 }
 
--(UIViewContentMode)getContentViewOf:(UIView*)view
-{
+-(UIViewContentMode)getContentViewOf:(UIView*)view{
+    
     UIViewContentMode contentMode = UIViewContentModeScaleToFill;
     if ([view isKindOfClass:[UIImageView class]]) {
         contentMode = view.contentMode;
@@ -181,11 +178,32 @@ static CGFloat ImageContainMargin = 10.0f;
     
 }
 
+
+#pragma mark -
+#pragma mark 清除方法
+-(void)destroyContainers{
+    
+    [_containers removeAllObjects];
+    for (XLImageContainer *container in _scrollView.subviews) {
+        [container destroy];
+        [container removeFromSuperview];
+    }
+}
+
+
+#pragma mark -
+#pragma mark 保存图片方法
+-(void)saveImageMethod{
+    
+    XLImageContainer *container = _containers[_currentIndex];
+    [container saveImage];
+}
+
 #pragma mark -
 #pragma mark ScrollViewDelegate
 
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
     _currentIndex = scrollView.contentOffset.x/scrollView.bounds.size.width;
     _pageLabel.text = [NSString stringWithFormat:@"%zd/%zd",_currentIndex + 1,_imageUrls.count];
 }

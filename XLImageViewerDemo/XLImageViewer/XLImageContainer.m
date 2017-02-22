@@ -8,6 +8,7 @@
 
 #import "XLImageContainer.h"
 #import "UIImageView+WebCache.h"
+#import "UIImage+GIF.h"
 #import "MBProgressHUD.h"
 
 static CGFloat maxZoomScale = 2.5f;
@@ -120,7 +121,6 @@ static CGFloat minZoomScale = 1.0f;
     }];
 }
 
-
 -(CGFloat)imageViewHeight
 {
     UIImage *image = _imageView.image;
@@ -171,6 +171,38 @@ static CGFloat minZoomScale = 1.0f;
         _scrollView.zoomScale = minZoomScale;
         [_scrollView addSubview:_imageView];
     }];
+}
+
+#pragma mark -
+#pragma mark 保存图片方法
+-(void)saveImage{
+    if (!_imageView.image) {return;}
+    UIImageWriteToSavedPhotosAlbum(_imageView.image, self, @selector(image:didFinishSavingWithError:contextInfo:), (__bridge void *)self);
+}
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
+    if (error != NULL) {return;}
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self animated:YES];
+    hud.mode = MBProgressHUDModeCustomView;
+    hud.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Checkmark"]];
+    hud.square = YES;
+    hud.label.text = @"图片存储成功";
+    [hud hideAnimated:YES afterDelay:1.50f];
+}
+
+#pragma mark -
+#pragma mark RecyleMethod
+-(void)destroy
+{
+    [_imageView removeFromSuperview];
+    _imageView = nil;
+    
+    [_hud removeFromSuperview];
+    _hud = nil;
+    
+    [_scrollView removeFromSuperview];
+    _scrollView = nil;
+    
 }
 
 #pragma mark -

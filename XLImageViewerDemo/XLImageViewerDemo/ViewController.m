@@ -10,6 +10,7 @@
 #import "XLImageViewer.h"
 #import "ImageCell.h"
 #import "SDImageCache.h"
+#import "MBProgressHUD.h"
 
 @interface ViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 {
@@ -99,9 +100,10 @@
 
 -(void)clearImageCache
 {
+    [MBProgressHUD showHUDAddedTo:self.view animated:true];
     [[SDImageCache sharedImageCache] clearMemory];
     [[SDImageCache sharedImageCache] clearDiskOnCompletion:^{
-        NSLog(@"清理完成");
+        [MBProgressHUD hideHUDForView:self.view animated:true];
         [_collectionView reloadData];
     }];
 }

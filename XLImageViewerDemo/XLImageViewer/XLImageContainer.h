@@ -16,6 +16,10 @@ typedef void(^VoidBlock)(void);
 
 @property (nonatomic,assign) UIViewContentMode imageContentMode;
 
+-(void)destroy;
+
+-(void)saveImage;
+
 -(void)addTapBlock:(VoidBlock)tapBlock;
 
 -(void)showLoadAnimateFromRect:(CGRect)rect;
