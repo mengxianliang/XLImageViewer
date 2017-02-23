@@ -33,10 +33,17 @@
     [self.contentView addSubview:_imageView];
 }
 
+
 -(void)setImageUrl:(NSString *)imageUrl
 {
     _imageUrl = imageUrl;
     [_imageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"PlaceHolder"]];
+}
+
+-(void)setImagePath:(NSString *)imagePath
+{
+    _imagePath = imagePath;
+    _imageView.image = [UIImage imageWithContentsOfFile:imagePath];
 }
 
 @end

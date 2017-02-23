@@ -14,6 +14,8 @@ typedef void(^VoidBlock)(void);
 
 @property (nonatomic,copy) NSString *imageUrl;
 
+@property (nonatomic,copy) NSString *imagePath;
+
 @property (nonatomic,assign) UIViewContentMode imageContentMode;
 
 -(void)destroy;

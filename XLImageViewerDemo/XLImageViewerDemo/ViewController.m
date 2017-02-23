@@ -7,16 +7,13 @@
 //
 
 #import "ViewController.h"
-#import "XLImageViewer.h"
-#import "ImageCell.h"
-#import "SDImageCache.h"
-#import "MBProgressHUD.h"
+#import "ShowNetImagesDemoVC.h"
+#import "ShowLocalImagesDemoVC.h"
 
-@interface ViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
+
+@interface ViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
-    UICollectionView *_collectionView;
-    
-    NSArray *_imageUrls;
+    UITableView *_tableView;
 }
 @end
 
@@ -26,92 +23,69 @@
     
     [super viewDidLoad];
     
-    [self buildData];
-    
     [self buildUI];
-}
-
--(void)buildData
-{
-    _imageUrls = @[
-                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/1.png",
-                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/2.png",
-                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/3.png",
-                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/4.png",
-                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/5.png",
-                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/6.png",
-                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/7.png",
-                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/8.png",
-                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/9.png",
-                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/10.png",
-                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/11.png",
-                @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/12.png"];
 }
 
 -(void)buildUI
 {
-    self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"XLImageViewer";
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(clearImageCache)];
+    self.view.backgroundColor = [UIColor whiteColor];
     
-    NSInteger ColumnNumber = 3;
-    CGFloat imageMargin = 10.0f;
-    CGFloat itemWidth = (self.view.bounds.size.width - (ColumnNumber + 1)*imageMargin)/ColumnNumber;
-    
-    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    flowLayout.sectionInset = UIEdgeInsetsMake(20, 0, 0, 0);
-    flowLayout.itemSize = CGSizeMake(itemWidth,itemWidth);
-    
-    _collectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:flowLayout];
-    _collectionView.showsHorizontalScrollIndicator = false;
-    _collectionView.backgroundColor = [UIColor clearColor];
-    [_collectionView registerClass:[ImageCell class] forCellWithReuseIdentifier:@"ImageCell"];
-    _collectionView.delegate = self;
-    _collectionView.dataSource = self;
-    [self.view addSubview:_collectionView];
+    _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    _tableView.tableFooterView = [UIView new];
+    [self.view addSubview:_tableView];
 }
 
 #pragma mark -
-#pragma mark CollectionViewDelegate&DataSource
--(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+#pragma mark 配置信息
+-(NSArray*)cellTitles
 {
-    return _imageUrls.count;
+    return @[@"Show network images",@"Show local images"];
 }
 
--(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+-(NSArray*)vcClasses
 {
-    return 1;
+    return @[[ShowNetImagesDemoVC class],[ShowLocalImagesDemoVC class]];
 }
 
--(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+#pragma mark -
+#pragma mark TableViewDelegate&DataSource
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* cellId = @"ImageCell";
-    ImageCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellId forIndexPath:indexPath];
-    cell.layer.borderWidth = 1.0f;
-    cell.imageUrl = _imageUrls[indexPath.row];
-    return  cell;
+    return 50;
 }
 
--(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    [[XLImageViewer shareInstanse] showImages:_imageUrls index:indexPath.row from:[collectionView cellForItemAtIndexPath:indexPath]];
+    return [self cellTitles].count;
 }
 
--(void)clearImageCache
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [MBProgressHUD showHUDAddedTo:self.view animated:true];
-    [[SDImageCache sharedImageCache] clearMemory];
-    [[SDImageCache sharedImageCache] clearDiskOnCompletion:^{
-        [MBProgressHUD hideHUDForView:self.view animated:true];
-        [_collectionView reloadData];
-    }];
+    NSString* cellIdentifier = @"cell";
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    }
+    cell.textLabel.text = [self cellTitles][indexPath.row];
+    return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Class vcClass = [self vcClasses][indexPath.row];
+    UIViewController *vc = [[vcClass alloc] init];
+    vc.title = [self cellTitles][indexPath.row];
+    [self.navigationController pushViewController:vc animated:true];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    
 }
-
 
 @end

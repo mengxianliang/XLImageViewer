@@ -9,9 +9,6 @@
 #import "XLImageViewer.h"
 #import "XLImageContainer.h"
 
-#define ScreenWidth [UIScreen mainScreen].bounds.size.width
-#define ScreenHeignt [UIScreen mainScreen].bounds.size.height
-
 //图片之间的间隔
 static CGFloat ImageContainMargin = 10.0f;
 
@@ -19,18 +16,14 @@ static CGFloat ImageContainMargin = 10.0f;
 {
     //滚动的ScrollView
     UIScrollView *_scrollView;
-    //用于保存图片预览view
+    //用于保存图片预览对象的集合
     NSMutableArray *_containers;
     //第一次加载的位置
     NSInteger _startIndex;
     //当前滚动位置
     NSInteger _currentIndex;
-    //图片地址
-    NSArray *_imageUrls;
-    
-    //开始加载时的图片
-    UIView *_startImageView;
-    
+    //开始加载时的图片位置
+    CGRect _startRect;
     //分页图片
     UILabel *_pageLabel;
     //保存按钮
@@ -99,19 +92,32 @@ static CGFloat ImageContainMargin = 10.0f;
     _currentIndex = 0;
 }
 
--(void)showImages:(NSArray <NSString *>*)imageUrls index:(NSInteger)index from:(UIView*)imageView{
-    
+#pragma mark -
+#pragma mark 加载图片方法
+
+-(void)showNetImages:(NSArray <NSString *>*)imageUrls index:(NSInteger)index from:(UIView*)imageView{
+    [self showImagesFromNet:true images:imageUrls index:index from:imageView];
+}
+
+-(void)showLocalImages:(NSArray <NSString *>*)imagePathes index:(NSInteger)index from:(UIView*)imageView{
+    [self showImagesFromNet:false images:imagePathes index:index from:imageView];
+}
+
+-(void)showImagesFromNet:(BOOL)fromNet images:(NSArray*)images index:(NSInteger)index from:(UIView*)imageView
+{
     _startIndex = index;
     _currentIndex = index;
-    _imageUrls = imageUrls;
-    _startImageView = imageView;
     
     //清除上一次的图片容器
     [self destroyContainers];
     
-    for (NSInteger i = 0; i<imageUrls.count ; i++) {
+    for (NSInteger i = 0; i<images.count ; i++) {
         XLImageContainer *container = [[XLImageContainer alloc] initWithFrame:CGRectMake(i * _scrollView.bounds.size.width, 0, self.bounds.size.width, self.bounds.size.height)];
-        container.imageUrl = imageUrls[i];
+        if (fromNet) {
+            container.imageUrl = images[i];
+        }else{
+            container.imagePath = images[i];
+        }
         container.imageContentMode = [self getContentViewOf:imageView];
         [container addTapBlock:^{
             [self backMethod];
@@ -120,11 +126,11 @@ static CGFloat ImageContainMargin = 10.0f;
         [_containers addObject:container];
     }
     
-    _scrollView.contentSize = CGSizeMake(imageUrls.count * _scrollView.bounds.size.width , ScreenHeignt);
+    _scrollView.contentSize = CGSizeMake(images.count * _scrollView.bounds.size.width , self.bounds.size.height);
     
     _scrollView.contentOffset = CGPointMake(_startIndex * _scrollView.bounds.size.width, 0);
     
-    _pageLabel.text = [NSString stringWithFormat:@"%zd/%zd",_currentIndex + 1,imageUrls.count];
+    _pageLabel.text = [NSString stringWithFormat:@"%zd/%zd",_currentIndex + 1,images.count];
     
     [[UIApplication sharedApplication].keyWindow addSubview:self];
     
@@ -136,7 +142,10 @@ static CGFloat ImageContainMargin = 10.0f;
         _pageLabel.hidden = false;
         _saveButton.hidden = false;
     }];
-    [container showLoadAnimateFromRect:[imageView convertRect:imageView.bounds toView:self]];
+    
+    _startRect = [imageView convertRect:imageView.bounds toView:self];
+    
+    [container showLoadAnimateFromRect:_startRect];
 }
 
 -(void)backMethod{
@@ -152,7 +161,7 @@ static CGFloat ImageContainMargin = 10.0f;
     }];
     if (_currentIndex == _startIndex) {
         XLImageContainer *container = _containers[_currentIndex];
-        [container showHideAnimateToRect:[_startImageView convertRect:_startImageView.bounds toView:self]];
+        [container showHideAnimateToRect:_startRect];
     }
 }
 
@@ -205,7 +214,7 @@ static CGFloat ImageContainMargin = 10.0f;
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
     _currentIndex = scrollView.contentOffset.x/scrollView.bounds.size.width;
-    _pageLabel.text = [NSString stringWithFormat:@"%zd/%zd",_currentIndex + 1,_imageUrls.count];
+    _pageLabel.text = [NSString stringWithFormat:@"%zd/%zd",_currentIndex + 1,_containers.count];
 }
 
 @end

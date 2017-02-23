@@ -121,6 +121,14 @@ static CGFloat minZoomScale = 1.0f;
     }];
 }
 
+-(void)setImagePath:(NSString *)imagePath
+{
+    _imagePath = imagePath;
+    [_hud hideAnimated:true];
+    _imageView.image = [UIImage imageWithContentsOfFile:imagePath];
+    [self setImageViewFrame];
+}
+
 -(CGFloat)imageViewHeight
 {
     UIImage *image = _imageView.image;
@@ -206,7 +214,7 @@ static CGFloat minZoomScale = 1.0f;
 }
 
 #pragma mark -
-#pragma mark 双击 单击方法
+#pragma mark 手势方法 双击 单击 拖拽
 -(void)addTapBlock:(VoidBlock)tapBlock
 {
     _tapBlock = tapBlock;

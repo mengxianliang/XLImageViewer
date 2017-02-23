@@ -9,8 +9,15 @@
 #import <UIKit/UIKit.h>
 
 @interface XLImageViewer : UIView
+/**
+ Show images frome net
+ */
+-(void)showNetImages:(NSArray <NSString *>*)imageUrls index:(NSInteger)index from:(UIView*)imageView;
 
--(void)showImages:(NSArray <NSString *>*)imageUrls index:(NSInteger)index from:(UIView*)imageView;
+/**
+ Show images frome local
+ */
+-(void)showLocalImages:(NSArray <NSString *>*)imagePathes index:(NSInteger)index from:(UIView*)imageView;
 
 +(XLImageViewer*)shareInstanse;
 

@@ -12,4 +12,6 @@
 
 @property (nonatomic,copy) NSString *imageUrl;
 
+@property (nonatomic,copy) NSString *imagePath;
+
 @end
