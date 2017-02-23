@@ -8,7 +8,6 @@
 
 #import "XLImageContainer.h"
 #import "UIImageView+WebCache.h"
-#import "UIImage+GIF.h"
 #import "MBProgressHUD.h"
 
 static CGFloat maxZoomScale = 2.5f;
