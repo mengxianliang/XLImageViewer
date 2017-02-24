@@ -10,9 +10,8 @@
 #import "XLImageViewer.h"
 #import "ImageCell.h"
 #import "SDImageCache.h"
-#import "MBProgressHUD.h"
 
-@interface ShowNetImagesDemoVC ()<UICollectionViewDelegate,UICollectionViewDataSource>
+@interface ShowNetImagesDemoVC ()<UICollectionViewDelegate,UICollectionViewDataSource,UIActionSheetDelegate>
 {
     UICollectionView *_collectionView;
     
@@ -49,7 +48,7 @@
 {
     self.view.backgroundColor = [UIColor whiteColor];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(clearImageCache)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(clearImageCache)];
     
     NSInteger ColumnNumber = 3;
     CGFloat imageMargin = 10.0f;
@@ -96,12 +95,19 @@
 
 -(void)clearImageCache
 {
-    [MBProgressHUD showHUDAddedTo:self.view animated:true];
-    [[SDImageCache sharedImageCache] clearMemory];
-    [[SDImageCache sharedImageCache] clearDiskOnCompletion:^{
-        [MBProgressHUD hideHUDForView:self.view animated:true];
-        [_collectionView reloadData];
-    }];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"删除本地图片缓存？" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"删除" otherButtonTitles:nil];
+    [sheet showInView:self.view];
+}
+
+
+-(void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        [[SDImageCache sharedImageCache] clearMemory];
+        [[SDImageCache sharedImageCache] clearDiskOnCompletion:^{
+            [_collectionView reloadData];
+        }];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

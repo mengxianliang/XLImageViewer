@@ -184,7 +184,6 @@ static CGFloat ImageContainMargin = 10.0f;
         }
     }
     return contentMode;
-    
 }
 
 

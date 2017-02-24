@@ -10,7 +10,6 @@
 #import "XLImageViewer.h"
 #import "ImageCell.h"
 #import "SDImageCache.h"
-#import "MBProgressHUD.h"
 
 @interface ShowLocalImagesDemoVC ()<UICollectionViewDelegate,UICollectionViewDataSource>
 {

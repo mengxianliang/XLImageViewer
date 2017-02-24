@@ -8,7 +8,7 @@
 
 #import "XLImageContainer.h"
 #import "UIImageView+WebCache.h"
-#import "MBProgressHUD.h"
+#import "XLImageLoading.h"
 
 static CGFloat maxZoomScale = 2.5f;
 static CGFloat minZoomScale = 1.0f;
@@ -21,7 +21,7 @@ static CGFloat minZoomScale = 1.0f;
     
     VoidBlock _tapBlock;
     
-    MBProgressHUD *_hud;
+    XLImageLoading *_loading;
 }
 @end
 
@@ -56,15 +56,10 @@ static CGFloat minZoomScale = 1.0f;
     UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap)];
     doubleTap.numberOfTapsRequired = 2;
     [self addGestureRecognizer:doubleTap];
-    
     //单击双击共存
     [singleTap requireGestureRecognizerToFail:doubleTap];
     
-    _hud = [MBProgressHUD showHUDAddedTo:self animated:YES];
-    _hud.mode = MBProgressHUDModeAnnularDeterminate;
-    _hud.bezelView.color = [UIColor clearColor];
-    _hud.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
-    _hud.contentColor = [UIColor whiteColor];
+    _loading = [XLImageLoading showInView:self];
 }
 
 -(void)layoutSubviews
@@ -112,18 +107,20 @@ static CGFloat minZoomScale = 1.0f;
     _imageUrl = imageUrl;
     [_imageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            _hud.progress = (CGFloat)receivedSize/(CGFloat)expectedSize;
+            _loading.progress = (CGFloat)receivedSize/(CGFloat)expectedSize;
         });
     } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         [self setImageViewFrame];
-        [_hud hideAnimated:true];
+        //隐藏加载
+        [_loading hide];
     }];
 }
 
 -(void)setImagePath:(NSString *)imagePath
 {
     _imagePath = imagePath;
-    [_hud hideAnimated:true];
+    //隐藏加载
+    [_loading hide];
     _imageView.image = [UIImage imageWithContentsOfFile:imagePath];
     [self setImageViewFrame];
 }
@@ -189,12 +186,7 @@ static CGFloat minZoomScale = 1.0f;
 
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
     if (error != NULL) {return;}
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self animated:YES];
-    hud.mode = MBProgressHUDModeCustomView;
-    hud.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Checkmark"]];
-    hud.square = YES;
-    hud.label.text = @"图片存储成功";
-    [hud hideAnimated:YES afterDelay:1.50f];
+    [XLImageLoading showAlertInView:self message:@"图片存储成功"];
 }
 
 #pragma mark -
@@ -204,8 +196,8 @@ static CGFloat minZoomScale = 1.0f;
     [_imageView removeFromSuperview];
     _imageView = nil;
     
-    [_hud removeFromSuperview];
-    _hud = nil;
+    [_loading removeFromSuperview];
+    _loading = nil;
     
     [_scrollView removeFromSuperview];
     _scrollView = nil;
@@ -222,7 +214,6 @@ static CGFloat minZoomScale = 1.0f;
 -(void)singleTap
 {
     _tapBlock();
-    NSLog(@"单击");
 }
 
 -(void)doubleTap
