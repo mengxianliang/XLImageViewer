@@ -105,6 +105,7 @@ static CGFloat ImageContainMargin = 10.0f;
 
 -(void)showImagesFromNet:(BOOL)fromNet images:(NSArray*)images index:(NSInteger)index from:(UIView*)imageView
 {
+    [[UIApplication sharedApplication] setStatusBarHidden:true];
     _startIndex = index;
     _currentIndex = index;
     
@@ -119,8 +120,21 @@ static CGFloat ImageContainMargin = 10.0f;
             container.imagePath = images[i];
         }
         container.imageContentMode = [self getContentViewOf:imageView];
-        [container addTapBlock:^{
+        [container addTapBlack:^{
             [self backMethod];
+        }];
+        [container addPanBackBlockPaning:^{
+            _pageLabel.hidden = true;
+            _saveButton.hidden = true;
+        } back:^(Boolean back) {
+            if (back) {
+                _pageLabel.hidden = true;
+                _saveButton.hidden = true;
+                [self removeFromSuperview];
+            }else{
+                _pageLabel.hidden = false;
+                _saveButton.hidden = false;
+            }
         }];
         [_scrollView addSubview:container];
         [_containers addObject:container];
@@ -134,35 +148,37 @@ static CGFloat ImageContainMargin = 10.0f;
     
     [[UIApplication sharedApplication].keyWindow addSubview:self];
     
+    //显示动画
     XLImageContainer *container = _containers[_currentIndex];
-    
-    [UIView animateWithDuration:0.35 animations:^{
-        self.backgroundColor = [UIColor blackColor];
-    }completion:^(BOOL finished) {
+    _startRect = [imageView convertRect:imageView.bounds toView:self];
+    [container showAnimateFromRect:_startRect finish:^{
         _pageLabel.hidden = false;
         _saveButton.hidden = false;
     }];
-    
-    _startRect = [imageView convertRect:imageView.bounds toView:self];
-    
-    [container showLoadAnimateFromRect:_startRect];
 }
 
 -(void)backMethod{
     
     _pageLabel.hidden = true;
     _saveButton.hidden = true;
-    [UIView animateWithDuration:0.35 animations:^{
-        self.backgroundColor = [UIColor clearColor];
-        if (_currentIndex != _startIndex) {self.alpha = 0;}
-    }completion:^(BOOL finished) {
+    
+    BOOL changeRect = _currentIndex == _startIndex;
+    //隐藏动画
+    XLImageContainer *container = _containers[_currentIndex];
+    [container hideAnimateToRect:_startRect changeRect:changeRect finish:^{
         [self removeFromSuperview];
-        self.alpha = 1;
     }];
-    if (_currentIndex == _startIndex) {
-        XLImageContainer *container = _containers[_currentIndex];
-        [container showHideAnimateToRect:_startRect];
-    }
+    
+//    [UIView animateWithDuration:0.35 animations:^{
+//        self.backgroundColor = [UIColor clearColor];
+//        if (_currentIndex != _startIndex) {self.alpha = 0;}
+//    }completion:^(BOOL finished) {
+//        [self removeFromSuperview];
+//    }];
+//    if (_currentIndex == _startIndex) {
+//        XLImageContainer *container = _containers[_currentIndex];
+//        [container showHideAnimateToRect:_startRect];
+//    }
 }
 
 -(UIViewContentMode)getContentViewOf:(UIView*)view{

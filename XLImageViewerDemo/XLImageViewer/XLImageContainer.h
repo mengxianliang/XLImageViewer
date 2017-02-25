@@ -10,6 +10,10 @@
 
 typedef void(^VoidBlock)(void);
 
+typedef void(^AlphaBlock)(CGFloat alpha);
+
+typedef void(^BoolBlock)(Boolean);
+
 @interface XLImageContainer : UIView
 
 @property (nonatomic,copy) NSString *imageUrl;
@@ -22,10 +26,12 @@ typedef void(^VoidBlock)(void);
 
 -(void)saveImage;
 
--(void)addTapBlock:(VoidBlock)tapBlock;
+-(void)addTapBlack:(VoidBlock)tapBlackBlock;
 
--(void)showLoadAnimateFromRect:(CGRect)rect;
+-(void)addPanBackBlockPaning:(VoidBlock)paning back:(BoolBlock)back;
 
--(void)showHideAnimateToRect:(CGRect)rect;
+-(void)showAnimateFromRect:(CGRect)rect finish:(VoidBlock)finisnBlock;
+
+-(void)hideAnimateToRect:(CGRect)rect changeRect:(BOOL)changeRect finish:(VoidBlock)finisnBlock;
 
 @end

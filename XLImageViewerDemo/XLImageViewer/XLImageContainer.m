@@ -12,6 +12,8 @@
 
 static CGFloat maxZoomScale = 2.5f;
 static CGFloat minZoomScale = 1.0f;
+//最小拖拽返回相应距离
+static CGFloat minPanLength = 100.0f;
 
 @interface XLImageContainer ()<UIScrollViewDelegate>
 {
@@ -19,9 +21,13 @@ static CGFloat minZoomScale = 1.0f;
     
     UIImageView *_imageView;
     
-    VoidBlock _tapBlock;
+    VoidBlock _tapBackBlock;
     
     XLImageLoading *_loading;
+    
+    VoidBlock _paningBlock;
+    
+    BoolBlock _panBackBlock;
 }
 @end
 
@@ -44,6 +50,8 @@ static CGFloat minZoomScale = 1.0f;
     _scrollView.minimumZoomScale = minZoomScale;
     _scrollView.showsHorizontalScrollIndicator = false;
     _scrollView.showsVerticalScrollIndicator = false;
+    _scrollView.decelerationRate = 0.1f;
+    [_scrollView.panGestureRecognizer addTarget:self action:@selector(scrollHandlePan:)];
     [self addSubview:_scrollView];
     
     _imageView = [[UIImageView alloc] init];
@@ -93,13 +101,12 @@ static CGFloat minZoomScale = 1.0f;
 {
     if (!_imageView.image) {return;}
     //这只imageview的图片和范围
-    _imageView.frame = CGRectMake(0, 0, _scrollView.bounds.size.width, [self imageViewHeight]);
-    //如果图片过长则以图片的高度为高度
-    if ([self imageViewHeight] < self.bounds.size.height) {
-        _imageView.center = _scrollView.center;
-    }
+    _imageView.frame = [self imageViewFrame];
     //设置ScrollView的滚动范围
-    _scrollView.contentSize = CGSizeMake(_imageView.bounds.size.width, [self imageViewHeight]);
+    
+    
+    CGFloat height = [self imageViewFrame].size.height > _scrollView.bounds.size.height ? [self imageViewFrame].size.height : _scrollView.bounds.size.height + 1;
+    _scrollView.contentSize = CGSizeMake(_imageView.bounds.size.width, height);
 }
 
 -(void)setImageUrl:(NSString *)imageUrl
@@ -125,12 +132,13 @@ static CGFloat minZoomScale = 1.0f;
     [self setImageViewFrame];
 }
 
--(CGFloat)imageViewHeight
+-(CGRect)imageViewFrame
 {
     UIImage *image = _imageView.image;
     CGFloat width = self.bounds.size.width;
     CGFloat height = width * image.size.height/image.size.width;
-    return height;
+    CGFloat y = height < self.bounds.size.height ? (self.bounds.size.height - height)/2.0f : 0;
+    return CGRectMake(0, y, width, height);
 }
 
 #pragma mark -
@@ -145,33 +153,47 @@ static CGFloat minZoomScale = 1.0f;
     [self updateImageFrame];
 }
 
-#pragma mark -
-#pragma mark 显示/隐藏动画
--(void)showLoadAnimateFromRect:(CGRect)rect
+-(void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale
 {
-    //如果还没加载完成网络图片则不显示动画
-    if (!_imageView.image) {return;}
-    _imageView.frame = rect;
-    CGRect targetFrame = CGRectMake(0, 0, _scrollView.bounds.size.width, [self imageViewHeight]);
-    //如果图片过长则以图片的高度为高度
-    if ([self imageViewHeight] < self.bounds.size.height) {
-        targetFrame.origin.y = (self.bounds.size.height - [self imageViewHeight])/2.0f;
-    }
-    [UIView animateWithDuration:0.35 animations:^{
-        _imageView.frame = targetFrame;
-    }];
-    
+    if (scale != 1) {return;}
+    CGFloat height = [self imageViewFrame].size.height > _scrollView.bounds.size.height ? [self imageViewFrame].size.height : _scrollView.bounds.size.height + 1;
+    _scrollView.contentSize = CGSizeMake(_imageView.bounds.size.width, height);
 }
 
--(void)showHideAnimateToRect:(CGRect)rect
+#pragma mark -
+#pragma mark 显示/隐藏动画
+-(void)showAnimateFromRect:(CGRect)rect finish:(VoidBlock)finisnBlock
 {
-    if (!_imageView.image) {return;}
-    CGRect startRect = CGRectMake(-_scrollView.contentOffset.x + _imageView.frame.origin.x, -_scrollView.contentOffset.y + _imageView.frame.origin.y, _imageView.frame.size.width, _imageView.frame.size.height);
-    _imageView.frame = startRect;
-    [self addSubview:_imageView];
+    //如果还没加载完成网络图片则不显示动画
+    _imageView.frame = rect;
+    self.superview.backgroundColor = [UIColor colorWithWhite:0 alpha:0];
     [UIView animateWithDuration:0.35 animations:^{
-        _imageView.frame = rect;
+        self.superview.backgroundColor = [UIColor colorWithWhite:0 alpha:1];
+        if (_imageView.image) {
+            _imageView.frame = [self imageViewFrame];
+        }
     }completion:^(BOOL finished) {
+        finisnBlock();
+    }];
+}
+
+-(void)hideAnimateToRect:(CGRect)rect changeRect:(BOOL)changeRect finish:(VoidBlock)finisnBlock;
+{
+    if (_imageView.image) {
+        CGRect startRect = CGRectMake(-_scrollView.contentOffset.x + _imageView.frame.origin.x, -_scrollView.contentOffset.y + _imageView.frame.origin.y, _imageView.frame.size.width, _imageView.frame.size.height);
+        _imageView.frame = startRect;
+        [self addSubview:_imageView];
+    }
+    [UIView animateWithDuration:0.35 animations:^{
+        if (changeRect && _imageView.image) {
+            _imageView.frame = rect;
+            self.superview.backgroundColor = [UIColor colorWithWhite:0 alpha:0];
+        }else{
+            self.superview.alpha = 0;
+        }
+    }completion:^(BOOL finished) {
+        finisnBlock();
+        self.superview.alpha = 1;
         _scrollView.zoomScale = minZoomScale;
         [_scrollView addSubview:_imageView];
     }];
@@ -206,14 +228,14 @@ static CGFloat minZoomScale = 1.0f;
 
 #pragma mark -
 #pragma mark 手势方法 双击 单击 拖拽
--(void)addTapBlock:(VoidBlock)tapBlock
+-(void)addTapBlack:(VoidBlock)tapBlackBlock
 {
-    _tapBlock = tapBlock;
+    _tapBackBlock = tapBlackBlock;
 }
 
 -(void)singleTap
 {
-    _tapBlock();
+    _tapBackBlock();
 }
 
 -(void)doubleTap
@@ -221,6 +243,47 @@ static CGFloat minZoomScale = 1.0f;
     //已经放大后 双击还原 未放大则双击放大
     CGFloat zoomScale = _scrollView.zoomScale != minZoomScale ? minZoomScale : maxZoomScale;
     [_scrollView setZoomScale:zoomScale animated:true];
+}
+
+#pragma mark -
+#pragma mark ScrollView拖拽方法
+
+-(void)addPanBackBlockPaning:(VoidBlock)paning back:(BoolBlock)back
+{
+    _paningBlock = paning;
+    _panBackBlock = back;
+}
+
+-(void)scrollHandlePan:(UIPanGestureRecognizer*)pan
+{
+    if (_scrollView.zoomScale != 1.0f) {return;}
+    if (_scrollView.contentOffset.y > 0) {return;}
+    
+    if (pan.state == UIGestureRecognizerStateEnded) {
+        NSLog(@"啦啦啦啦啦");
+        if (ABS(_scrollView.contentOffset.y) < minPanLength) {
+            _panBackBlock(false);
+            [UIView animateWithDuration:0.35 animations:^{
+                _scrollView.contentInset = UIEdgeInsetsZero;
+            }];
+        }else{
+            [UIView animateWithDuration:0.35 animations:^{
+                CGRect frame = _imageView.frame;
+                frame.origin.y = _scrollView.bounds.size.height;
+                _imageView.frame = frame;
+                self.superview.backgroundColor = [UIColor colorWithWhite:0 alpha:0];
+            }completion:^(BOOL finished) {
+                _panBackBlock(true);
+            }];
+        }
+    }else{
+        _paningBlock();
+        NSLog(@"哈哈哈哈");
+        NSLog(@"_scrollView.contentOffset.y = %f",_scrollView.contentOffset.y);
+        _scrollView.contentInset = UIEdgeInsetsMake(-_scrollView.contentOffset.y, 0, 0, 0);
+        CGFloat alpha = 1 - ABS(_scrollView.contentOffset.y/(_scrollView.bounds.size.height));
+        self.superview.backgroundColor = [UIColor colorWithWhite:0 alpha:alpha];
+    }
 }
 
 @end
