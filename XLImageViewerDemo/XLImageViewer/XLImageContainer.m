@@ -260,7 +260,6 @@ static CGFloat minPanLength = 100.0f;
     if (_scrollView.contentOffset.y > 0) {return;}
     
     if (pan.state == UIGestureRecognizerStateEnded) {
-        NSLog(@"啦啦啦啦啦");
         if (ABS(_scrollView.contentOffset.y) < minPanLength) {
             _panBackBlock(false);
             [UIView animateWithDuration:0.35 animations:^{
@@ -278,8 +277,6 @@ static CGFloat minPanLength = 100.0f;
         }
     }else{
         _paningBlock();
-        NSLog(@"哈哈哈哈");
-        NSLog(@"_scrollView.contentOffset.y = %f",_scrollView.contentOffset.y);
         _scrollView.contentInset = UIEdgeInsetsMake(-_scrollView.contentOffset.y, 0, 0, 0);
         CGFloat alpha = 1 - ABS(_scrollView.contentOffset.y/(_scrollView.bounds.size.height));
         self.superview.backgroundColor = [UIColor colorWithWhite:0 alpha:alpha];
