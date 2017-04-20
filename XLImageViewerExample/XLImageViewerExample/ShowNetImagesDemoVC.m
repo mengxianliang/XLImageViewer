@@ -8,6 +8,7 @@
 
 #import "ShowNetImagesDemoVC.h"
 #import "XLImageViewer.h"
+#import "XLImageViewer.h"
 #import "ImageCell.h"
 #import "SDImageCache.h"
 
@@ -91,7 +92,11 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     //利用XLImageViewer显示图片
-    [[XLImageViewer shareInstanse] showNetImages:[self imageUrls] index:indexPath.row from:[collectionView cellForItemAtIndexPath:indexPath]];
+   // [[XLImageViewer shareInstanse] showNetImages:[self imageUrls] index:indexPath.row from:[collectionView cellForItemAtIndexPath:indexPath]];
+    
+    [[XLImageViewer shareInstanse] showNetImages:[self imageUrls] index:indexPath.row fromImageContainer:[collectionView cellForItemAtIndexPath:indexPath]];
+    
+//    [[XLImageViewerNew shareInstanse] showNetImages:[self imageUrls] index:indexPath.row fromSuperView:[collectionView cellForItemAtIndexPath:indexPath]];
 }
 
 -(void)clearImageCache
@@ -100,7 +105,7 @@
     [sheet showInView:self.view];
 }
 
-
+//清除本地图片缓存
 -(void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 0) {
