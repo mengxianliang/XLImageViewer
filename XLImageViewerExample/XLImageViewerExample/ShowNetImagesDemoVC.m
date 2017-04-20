@@ -91,12 +91,8 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    //利用XLImageViewer显示图片
-   // [[XLImageViewer shareInstanse] showNetImages:[self imageUrls] index:indexPath.row from:[collectionView cellForItemAtIndexPath:indexPath]];
-    
+    //利用XLImageViewer显示网络图片
     [[XLImageViewer shareInstanse] showNetImages:[self imageUrls] index:indexPath.row fromImageContainer:[collectionView cellForItemAtIndexPath:indexPath]];
-    
-//    [[XLImageViewerNew shareInstanse] showNetImages:[self imageUrls] index:indexPath.row fromSuperView:[collectionView cellForItemAtIndexPath:indexPath]];
 }
 
 -(void)clearImageCache
