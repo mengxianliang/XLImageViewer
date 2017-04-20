@@ -10,6 +10,7 @@
 ### 说明
 
 * 加载网络图片的功能时利用SDWebImage实现的，所以在使用XLImageViewer时需要在项目里添加SDWebImage。
+* 图片切换时利用UICollectionView实现的；图片的缩放是利用ScrollView的缩放原理实现的。
 
 ### 使用
 
@@ -25,3 +26,5 @@
 [[XLImageViewer shareInstanse] showLocalImages:[self imagePathes] index:indexPath.row fromImageContainer:[collectionView cellForItemAtIndexPath:indexPath]];
 ```
 
+### 其他
+**之前利用ScrollView实现切换的版本:[戳这里]()**
