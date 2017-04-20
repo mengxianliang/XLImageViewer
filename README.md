@@ -3,13 +3,13 @@
 
 ### 功能
 
-| 加载、隐藏时的缩放动画 | 网络图片加载 | 图片捏合缩放、双击放大/还原 | 下滑隐藏 | 保存图片到相册 |
+| 缩放动画 | 加载网络图片 | 捏合缩放、双击放大/还原 | 下滑隐藏 | 保存图片到相册 |
 | ---- | ---- | ---- | ---- | ---- |
 | ![image](https://github.com/mengxianliang/XLImageViewer/blob/master/GIF/1-1.gif) |![image](https://github.com/mengxianliang/XLImageViewer/blob/master/GIF/2-1.gif) |![image](https://github.com/mengxianliang/XLImageViewer/blob/master/GIF/3-1.gif) |![image](https://github.com/mengxianliang/XLImageViewer/blob/master/GIF/4-1.gif) |![image](https://github.com/mengxianliang/XLImageViewer/blob/master/GIF/5-1.gif) |
 
 ### 说明
 
-* 网络图片加载部分使用的是SDWebImage，所以在使用本工具时需要在项目里添加SDWebImage
+* 加载网络图片的功能时利用SDWebImage实现的，所以在使用XLImageViewer时需要在项目里添加SDWebImage。
 
 ### 使用
 
