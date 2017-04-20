@@ -27,4 +27,4 @@
 ```
 
 ### 其他:
-**之前利用ScrollView实现切换的版本:[戳这里]()**
+**之前利用ScrollView实现切换的版本:[戳这里](http://download.csdn.net/detail/u013282507/9820283)**
