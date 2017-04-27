@@ -3,7 +3,7 @@
 
 ### 功能:
 
-| 缩放动画 | 加载网络图片 | 捏合缩放、双击放大/还原 | 下滑隐藏 | 保存图片到相册 |
+| 缩放动画 | 加载网络图片 | 捏合、双击 | 下滑隐藏 | 保存到相册 |
 | ---- | ---- | ---- | ---- | ---- |
 | ![image](https://github.com/mengxianliang/XLImageViewer/blob/master/GIF/1-1.gif) |![image](https://github.com/mengxianliang/XLImageViewer/blob/master/GIF/2-1.gif) |![image](https://github.com/mengxianliang/XLImageViewer/blob/master/GIF/3-1.gif) |![image](https://github.com/mengxianliang/XLImageViewer/blob/master/GIF/4-1.gif) |![image](https://github.com/mengxianliang/XLImageViewer/blob/master/GIF/5-1.gif) |
 
