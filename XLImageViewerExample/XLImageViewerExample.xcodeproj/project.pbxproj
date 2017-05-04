@@ -548,6 +548,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: xianliang meng (79SX5888C3)";
 				DEVELOPMENT_TEAM = X496RVQDTB;
 				INFOPLIST_FILE = XLImageViewerExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = mxl.XLImageViewerExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -563,6 +564,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: xianliang meng (79SX5888C3)";
 				DEVELOPMENT_TEAM = X496RVQDTB;
 				INFOPLIST_FILE = XLImageViewerExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = mxl.XLImageViewerExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -590,6 +592,7 @@
 				5EA076691EA88D35007D68E2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
