@@ -7,10 +7,10 @@
 //
 
 #import "XLImageViewer.h"
-#import "XLImageViewerCell.h"
+#import "XLImageViewerItem.h"
 #import "XLImageViewerTooBar.h"
 
-static NSString* cellId = @"XLImageViewerCell";
+static NSString* cellId = @"XLImageViewerItem";
 
 //cell之间的间隔
 static CGFloat lineSpacing = 10.0f;
@@ -74,7 +74,7 @@ static CGFloat lineSpacing = 10.0f;
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
     _collectionView.pagingEnabled = true;
-    [_collectionView registerClass:[XLImageViewerCell class] forCellWithReuseIdentifier:cellId];
+    [_collectionView registerClass:[XLImageViewerItem class] forCellWithReuseIdentifier:cellId];
     _collectionView.showsHorizontalScrollIndicator = false;
     [self addSubview:_collectionView];
     
@@ -99,7 +99,7 @@ static CGFloat lineSpacing = 10.0f;
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    XLImageViewerCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellId forIndexPath:indexPath];
+    XLImageViewerItem *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellId forIndexPath:indexPath];
     //设置属性
     cell.showNetImage = _showNetImages;
     cell.isStart = indexPath.row == _startIndex;
@@ -162,8 +162,8 @@ static CGFloat lineSpacing = 10.0f;
     [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:false];
     //找到指定Cell执行放大动画
     [_collectionView performBatchUpdates:nil completion:^(BOOL finished) {
-        XLImageViewerCell *cell = (XLImageViewerCell*)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
-        [cell showEnlargeAnimation];
+        XLImageViewerItem *item = (XLImageViewerItem *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+        [item showEnlargeAnimation];
         //添加到屏幕上
         [[UIApplication sharedApplication].keyWindow addSubview:self];
     }];
@@ -195,8 +195,8 @@ static CGFloat lineSpacing = 10.0f;
 #pragma mark -
 #pragma mark 存储图片方法
 -(void)saveImage{
-    XLImageViewerCell *cell = (XLImageViewerCell*)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentIndex inSection:0]];
-    [cell saveImage];
+    XLImageViewerItem *item = (XLImageViewerItem *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_currentIndex inSection:0]];
+    [item saveImage];
 }
 
 @end

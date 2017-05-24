@@ -10,7 +10,7 @@
 
 typedef void(^VoidBlock)(void);
 
-@interface XLImageViewerCell : UICollectionViewCell
+@interface XLImageViewerItem : UICollectionViewCell
 
 //显示网路图片
 @property (nonatomic ,assign) BOOL showNetImage;

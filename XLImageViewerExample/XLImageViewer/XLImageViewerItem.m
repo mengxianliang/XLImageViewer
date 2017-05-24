@@ -6,7 +6,7 @@
 //  Copyright © 2017年 Apple. All rights reserved.
 //
 
-#import "XLImageViewerCell.h"
+#import "XLImageViewerItem.h"
 #import "UIImageView+WebCache.h"
 #import "XLImageLoading.h"
 
@@ -15,7 +15,7 @@ static CGFloat minZoomScale = 1.0f;
 //最小拖拽返回相应距离
 static CGFloat minPanLength = 100.0f;
 
-@interface XLImageViewerCell ()<UIScrollViewDelegate>
+@interface XLImageViewerItem ()<UIScrollViewDelegate>
 {
     //ScrollView
     UIScrollView *_scrollView;
@@ -33,7 +33,7 @@ static CGFloat minPanLength = 100.0f;
 }
 @end
 
-@implementation XLImageViewerCell
+@implementation XLImageViewerItem
 
 -(instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {

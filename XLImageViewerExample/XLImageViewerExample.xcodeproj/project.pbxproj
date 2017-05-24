@@ -16,7 +16,7 @@
 		5EA0766E1EA88D7C007D68E2 /* ShowLocalImagesDemoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EA0766B1EA88D7C007D68E2 /* ShowLocalImagesDemoVC.m */; };
 		5EA0766F1EA88D7C007D68E2 /* ShowNetImagesDemoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EA0766D1EA88D7C007D68E2 /* ShowNetImagesDemoVC.m */; };
 		5EA076731EA88DCD007D68E2 /* XLImageViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EA076721EA88DCD007D68E2 /* XLImageViewer.m */; };
-		5EA076781EA88E15007D68E2 /* XLImageViewerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EA076751EA88E15007D68E2 /* XLImageViewerCell.m */; };
+		5EA076781EA88E15007D68E2 /* XLImageViewerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EA076751EA88E15007D68E2 /* XLImageViewerItem.m */; };
 		5EA076791EA88E15007D68E2 /* XLImageViewerTooBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EA076771EA88E15007D68E2 /* XLImageViewerTooBar.m */; };
 		5EA0767C1EA88E49007D68E2 /* ImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EA0767B1EA88E49007D68E2 /* ImageCell.m */; };
 		5EA076A81EA88E71007D68E2 /* FLAnimatedImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EA076801EA88E71007D68E2 /* FLAnimatedImageView+WebCache.m */; };
@@ -73,8 +73,8 @@
 		5EA0766D1EA88D7C007D68E2 /* ShowNetImagesDemoVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowNetImagesDemoVC.m; sourceTree = "<group>"; };
 		5EA076711EA88DCD007D68E2 /* XLImageViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLImageViewer.h; sourceTree = "<group>"; };
 		5EA076721EA88DCD007D68E2 /* XLImageViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLImageViewer.m; sourceTree = "<group>"; };
-		5EA076741EA88E15007D68E2 /* XLImageViewerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLImageViewerCell.h; sourceTree = "<group>"; };
-		5EA076751EA88E15007D68E2 /* XLImageViewerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLImageViewerCell.m; sourceTree = "<group>"; };
+		5EA076741EA88E15007D68E2 /* XLImageViewerItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLImageViewerItem.h; sourceTree = "<group>"; };
+		5EA076751EA88E15007D68E2 /* XLImageViewerItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLImageViewerItem.m; sourceTree = "<group>"; };
 		5EA076761EA88E15007D68E2 /* XLImageViewerTooBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLImageViewerTooBar.h; sourceTree = "<group>"; };
 		5EA076771EA88E15007D68E2 /* XLImageViewerTooBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLImageViewerTooBar.m; sourceTree = "<group>"; };
 		5EA0767A1EA88E49007D68E2 /* ImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCell.h; sourceTree = "<group>"; };
@@ -203,8 +203,8 @@
 			children = (
 				5EA076711EA88DCD007D68E2 /* XLImageViewer.h */,
 				5EA076721EA88DCD007D68E2 /* XLImageViewer.m */,
-				5EA076741EA88E15007D68E2 /* XLImageViewerCell.h */,
-				5EA076751EA88E15007D68E2 /* XLImageViewerCell.m */,
+				5EA076741EA88E15007D68E2 /* XLImageViewerItem.h */,
+				5EA076751EA88E15007D68E2 /* XLImageViewerItem.m */,
 				5EA076761EA88E15007D68E2 /* XLImageViewerTooBar.h */,
 				5EA076771EA88E15007D68E2 /* XLImageViewerTooBar.m */,
 				5EA076BC1EA88EAA007D68E2 /* XLImageLoading.h */,
@@ -419,7 +419,7 @@
 				5EA076AA1EA88E71007D68E2 /* NSData+ImageContentType.m in Sources */,
 				5EA076B91EA88E71007D68E2 /* UIImageView+WebCache.m in Sources */,
 				5EA076B21EA88E71007D68E2 /* SDWebImageManager.m in Sources */,
-				5EA076781EA88E15007D68E2 /* XLImageViewerCell.m in Sources */,
+				5EA076781EA88E15007D68E2 /* XLImageViewerItem.m in Sources */,
 				5EA076BB1EA88E71007D68E2 /* UIView+WebCacheOperation.m in Sources */,
 				5EA076AC1EA88E71007D68E2 /* SDImageCache.m in Sources */,
 			);
