@@ -151,7 +151,9 @@ static CGFloat lineSpacing = 10.0f;
     //设置起始位置
     _startIndex = index;
     //初始化锚点
-    _anchorFrame = [_imageContainer convertRect:_imageContainer.bounds toView:self];
+//    _anchorFrame = [_imageContainer convertRect:_imageContainer.bounds toView:self];
+    _anchorFrame = [_imageContainer convertRect:_imageContainer.bounds toCoordinateSpace:self];
+    
     //更新显示
     _toolBar.text = [NSString stringWithFormat:@"%zd/%zd",_currentIndex + 1,_imageUrls.count];
     [_toolBar show];
