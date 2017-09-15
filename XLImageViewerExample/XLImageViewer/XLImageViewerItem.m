@@ -234,9 +234,22 @@ static CGFloat minPanLength = 100.0f;
 
 #pragma mark -
 #pragma mark 拖拽返回方法
+
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    if (ABS(_scrollView.contentOffset.y) < minPanLength) {
+        CGFloat alpha = 1 - ABS(_scrollView.contentOffset.y/(_scrollView.bounds.size.height));
+        _collectionView.backgroundColor = [UIColor colorWithWhite:0 alpha:alpha];
+    }
+}
+
 -(void)scrollViewPanMethod:(UIPanGestureRecognizer*)pan{
     if (_scrollView.zoomScale != 1.0f) {return;}
-    if (_scrollView.contentOffset.y > 0) {return;}
+    if (_scrollView.contentOffset.y > 0) {
+        _cancleideBlock();
+        return;
+    }
     //拖拽结束后判断位置
     if (pan.state == UIGestureRecognizerStateEnded) {
         if (ABS(_scrollView.contentOffset.y) < minPanLength) {

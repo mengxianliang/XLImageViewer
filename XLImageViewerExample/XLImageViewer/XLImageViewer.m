@@ -17,8 +17,6 @@ static CGFloat lineSpacing = 10.0f;
 
 @interface XLImageViewer ()<UICollectionViewDelegate,UICollectionViewDataSource>
 {
-    //滚动的ScrollView
-    UICollectionView *_collectionView;
     //第一次加载的位置
     NSInteger _startIndex;
     //当前滚动位置
@@ -31,9 +29,12 @@ static CGFloat lineSpacing = 10.0f;
     UIView *_imageContainer;
     //是否显示网络图片
     BOOL _showNetImages;
-    //工具栏
-    XLImageViewerTooBar *_toolBar;
 }
+//滚动的ScrollView
+@property (nonatomic, strong) UICollectionView *collectionView;
+//工具栏
+@property (nonatomic, strong) XLImageViewerTooBar *toolBar;
+
 @end
 
 @implementation XLImageViewer
@@ -108,12 +109,13 @@ static CGFloat lineSpacing = 10.0f;
     cell.imageViewContentMode = [self imageViewContentMode];
     cell.imageUrl = _imageUrls[indexPath.row];
     //添加回调
+    __weak typeof (self)weekSelf = self;
     [cell addHideBlockStart:^{
-        [_toolBar hide];
+        [weekSelf.toolBar hide];
     } finish:^{
-        [self removeFromSuperview];
+        [weekSelf removeFromSuperview];
     } cancle:^{
-        [_toolBar show];
+        [weekSelf.toolBar show];
     }];
     return cell;
 }
@@ -163,8 +165,9 @@ static CGFloat lineSpacing = 10.0f;
     //滚动到指定位置
     [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:false];
     //找到指定Cell执行放大动画
+    __weak typeof (self)weekSelf = self;
     [_collectionView performBatchUpdates:nil completion:^(BOOL finished) {
-        XLImageViewerItem *item = (XLImageViewerItem *)[_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+        XLImageViewerItem *item = (XLImageViewerItem *)[weekSelf.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
         [item showEnlargeAnimation];
         //添加到屏幕上
         [[UIApplication sharedApplication].keyWindow addSubview:self];
