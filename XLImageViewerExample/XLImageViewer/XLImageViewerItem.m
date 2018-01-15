@@ -8,7 +8,9 @@
 
 #import "XLImageViewerItem.h"
 #import "UIImageView+WebCache.h"
+#import "FLAnimatedImageView.h"
 #import "XLImageLoading.h"
+#import "FLAnimatedImageView.h"
 
 static CGFloat maxZoomScale = 2.5f;
 static CGFloat minZoomScale = 1.0f;
@@ -20,7 +22,7 @@ static CGFloat minPanLength = 100.0f;
     //ScrollView
     UIScrollView *_scrollView;
     //ImageView
-    UIImageView *_imageView;
+    FLAnimatedImageView *_imageView;
     //加载动画
     XLImageLoading *_loading;
     //返回方法
@@ -56,7 +58,7 @@ static CGFloat minPanLength = 100.0f;
     _scrollView.userInteractionEnabled = true;
     [self.contentView addSubview:_scrollView];
     
-    _imageView = [[UIImageView alloc] initWithFrame:_scrollView.bounds];
+    _imageView = [[FLAnimatedImageView alloc] initWithFrame:_scrollView.bounds];
     _imageView.layer.masksToBounds = true;
     _imageView.userInteractionEnabled = true;
     [_scrollView addSubview:_imageView];

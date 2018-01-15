@@ -42,7 +42,8 @@
              @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/9.png",
              @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/10.png",
              @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/11.png",
-             @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/12.png"];
+             @"https://raw.githubusercontent.com/mengxianliang/XLImageViewer/master/Images/12.png",
+             @"https://raw.githubusercontent.com/mengxianliang/XLPlayButton/master/GIF/1.gif"];
 }
 
 -(void)buildUI
