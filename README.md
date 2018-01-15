@@ -1,5 +1,6 @@
 # XLImageViewer
-仿照今日头条的图片浏览功能，实现的轻量级图片浏览工具。
+
+仿照今日头条的图片浏览工具。
 
 ### 功能:
 
@@ -9,8 +10,10 @@
 
 ### 说明:
 
-* 加载网络图片的功能时利用**SDWebImage**实现的，所以在使用XLImageViewer时需要在项目里添加**SDWebImage**。
-* 图片切换时利用UICollectionView实现的；图片的缩放是利用ScrollView的缩放原理实现的。
+* 支持Gif图片显示
+* 支持本地、网络图片显示
+* 依赖两个框架[SDWebImage](https://github.com/rs/SDWebImage)、[FLAnimatedImage](https://github.com/Flipboard/FLAnimatedImage)
+
 
 ### 使用:
 
