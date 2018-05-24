@@ -154,15 +154,17 @@ static CGFloat minPanLength = 100.0f;
         return;
     }
     //显示网络图片
-    [_imageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+    [_imageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [_loading show];
             _loading.progress = (CGFloat)receivedSize/(CGFloat)expectedSize;
         });
-    } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+    } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
         [self setImageViewFrame];
         //隐藏加载
         [_loading hide];
+        
     }];
 }
 

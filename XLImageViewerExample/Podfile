@@ -1,0 +1,5 @@
+platform :ios, '8.0'  
+target 'XLImageViewerExample' do  
+pod 'SDWebImage', '~> 3.7.6' 
+pod 'FLAnimatedImage', '~> 1.0.12' 
+end 
