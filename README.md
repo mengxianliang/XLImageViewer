@@ -12,7 +12,7 @@
 
 * 支持Gif图片显示
 * 支持本地、网络图片显示
-* 依赖两个框架[SDWebImage](https://github.com/rs/SDWebImage)、[FLAnimatedImage](https://github.com/Flipboard/FLAnimatedImage)
+* 通过Pods依赖两个框架[SDWebImage](https://github.com/rs/SDWebImage)、[FLAnimatedImage](https://github.com/Flipboard/FLAnimatedImage)
 
 
 ### 使用:
