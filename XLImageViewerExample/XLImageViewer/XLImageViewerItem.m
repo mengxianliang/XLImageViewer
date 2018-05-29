@@ -64,7 +64,7 @@ static CGFloat minPanLength = 100.0f;
     [_scrollView addSubview:_imageView];
     
     //添加双击方法
-    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(enlargeImageView)];
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(enlargeImageView:)];
     doubleTap.numberOfTapsRequired = 2;
     [self addGestureRecognizer:doubleTap];
     
@@ -81,10 +81,18 @@ static CGFloat minPanLength = 100.0f;
 #pragma mark -
 #pragma mark 点击方法
 //双击 放大缩小
--(void)enlargeImageView{
+-(void)enlargeImageView:(UIGestureRecognizer *)gesture{
     //已经放大后 双击还原 未放大则双击放大
     CGFloat zoomScale = _scrollView.zoomScale != minZoomScale ? minZoomScale : maxZoomScale;
-    [_scrollView setZoomScale:zoomScale animated:true];
+//    [_scrollView setZoomScale:zoomScale animated:true];
+    
+    CGPoint center = [gesture locationInView:_imageView];
+    CGRect zoomRect;
+    zoomRect.size.height = CGRectGetHeight(_scrollView.frame) / zoomScale;
+    zoomRect.size.width  = CGRectGetWidth(_scrollView.frame)  / zoomScale;
+    zoomRect.origin.x = center.x - (zoomRect.size.width  /2.0);
+    zoomRect.origin.y = center.y - (zoomRect.size.height /2.0);
+    [_scrollView zoomToRect:zoomRect animated:YES];
 }
 
 #pragma mark -
@@ -94,40 +102,8 @@ static CGFloat minPanLength = 100.0f;
     return _imageView;
 }
 
--(void)scrollViewDidZoom:(UIScrollView *)scrollView
-{
-    [self updateImageFrame];
-}
-
--(void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale
-{
-    if (scale != 1) {return;}
-    CGFloat height = [self imageViewFrame].size.height > _scrollView.bounds.size.height ? [self imageViewFrame].size.height : _scrollView.bounds.size.height + 1;
-    _scrollView.contentSize = CGSizeMake(_imageView.bounds.size.width, height);
-}
-
 #pragma mark -
 #pragma mark ImageView设置Frame相关方法
--(void)updateImageFrame
-{
-    CGRect imageFrame = _imageView.frame;
-    
-    if (imageFrame.size.width < self.bounds.size.width) {
-        imageFrame.origin.x = (self.bounds.size.width - imageFrame.size.width)/2.0f;
-    }else{
-        imageFrame.origin.x = 0;
-    }
-    
-    if (imageFrame.size.height < self.bounds.size.height) {
-        imageFrame.origin.y = (self.bounds.size.height - imageFrame.size.height)/2.0f;
-    }else{
-        imageFrame.origin.y = 0;
-    }
-    
-    if (!CGRectEqualToRect(_imageView.frame, imageFrame)){
-        _imageView.frame = imageFrame;
-    }
-}
 
 -(CGRect)imageViewFrame
 {
